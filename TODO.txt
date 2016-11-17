@@ -1,0 +1,5 @@
+A faire
+
+- Géré la déconnexion quand on clique sur le bouton déconnecter
+- clear le tfMessage et remettre le focus sur lui quand on a cliquer sur envoyer
+- pouvoir faire enter quand on a le tfMessage de focus et ca envoye 

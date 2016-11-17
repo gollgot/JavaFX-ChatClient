@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ import javafx.scene.layout.Pane;
  */
 public class FXMLDocumentController implements Initializable {
     
+    Socket socket;
     
     @FXML
     private TextArea taContent;
@@ -54,6 +56,7 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         btnDisconnection.setVisible(false);
         btnSend.setDisable(true);
+        tfMessage.setDisable(true);
     }    
 
     @FXML
@@ -64,14 +67,17 @@ public class FXMLDocumentController implements Initializable {
             String serverIp = tfServerIp.getText();
             String username = tfUsername.getText();
             // create socket to the server
-            Socket socket = new Socket(serverIp,port);
+            socket = new Socket(serverIp,port);
             
             // We hide the btnConnection, display the btnDisconnection
             // And we disable username and ipServer textField (this way the user cannot change them)
+            // And enable the TF message ans btn send
             btnConnection.setVisible(false);
             btnDisconnection.setVisible(true);
             tfUsername.setDisable(true);
             tfServerIp.setDisable(true);
+            btnSend.setDisable(false);
+            tfMessage.setDisable(false);
             
             // If the connection is establish, the server is waiting our username
             // so, we send it 
@@ -89,6 +95,22 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void btnDisconnexionAction(ActionEvent event) {
       
+    }
+
+    @FXML
+    private void btnSendAction(ActionEvent event) {
+  
+        try {
+            // Send a message to the server
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            String messageToSend = tfMessage.getText();
+            out.println(messageToSend);
+            out.flush();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
 }
