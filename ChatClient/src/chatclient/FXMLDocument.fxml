@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatclient.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="532.0" prefWidth="840.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="chatclient.FXMLDocumentController">
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
+      <TextArea fx:id="taContent" editable="false" layoutX="26.0" layoutY="31.0" prefHeight="420.0" prefWidth="480.0" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <TextField fx:id="tfMessage" layoutX="20.0" layoutY="461.0" prefHeight="37.0" prefWidth="480.0" promptText="Votre message" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" />
+      <TextField fx:id="tfUsername" layoutX="517.0" layoutY="20.0" prefHeight="31.0" prefWidth="140.0" promptText="Pseudo" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="20.0" />
+      <TextField fx:id="tfServerIp" layoutX="690.0" layoutY="20.0" prefHeight="31.0" prefWidth="140.0" promptText="IP du serveur" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <Button fx:id="btnConnection" layoutX="520.0" layoutY="64.0" mnemonicParsing="false" onAction="#btnConnexionAction" prefHeight="31.0" prefWidth="299.0" text="Connection" textAlignment="CENTER" AnchorPane.leftAnchor="520.0" AnchorPane.rightAnchor="20.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnDisconnection" layoutX="520.0" layoutY="64.0" mnemonicParsing="false" onAction="#btnDisconnexionAction" prefHeight="37.0" prefWidth="300.0" text="Déconnexion" />
+      <Text layoutX="521.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Utilisateur(s) en ligne" AnchorPane.leftAnchor="520.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <TextArea fx:id="taConnectedUsers" editable="false" layoutX="520.0" layoutY="153.0" prefHeight="286.0" prefWidth="300.0" wrapText="true" AnchorPane.leftAnchor="520.0" AnchorPane.rightAnchor="20.0" />
+      <Button fx:id="btnSend" layoutX="520.0" layoutY="465.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="125.0" text="Envoyer">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
