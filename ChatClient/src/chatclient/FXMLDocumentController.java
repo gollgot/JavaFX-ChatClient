@@ -28,8 +28,6 @@ import javafx.scene.layout.Pane;
 public class FXMLDocumentController implements Initializable {
     
     
-    
-    
     @FXML
     private TextArea taContent;
     @FXML
@@ -60,6 +58,32 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void btnConnexionAction(ActionEvent event){
+        int port = 23002;
+        
+        try {
+            String serverIp = tfServerIp.getText();
+            String username = tfUsername.getText();
+            // create socket to the server
+            Socket socket = new Socket(serverIp,port);
+            
+            // We hide the btnConnection, display the btnDisconnection
+            // And we disable username and ipServer textField (this way the user cannot change them)
+            btnConnection.setVisible(false);
+            btnDisconnection.setVisible(true);
+            tfUsername.setDisable(true);
+            tfServerIp.setDisable(true);
+            
+            // If the connection is establish, the server is waiting our username
+            // so, we send it 
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            out.println(username);
+            out.flush();
+        } catch (IOException ex) {
+            // The connection is not etablish
+            taContent.setText(taContent.getText()+"Connexion au serveur impossible ...\n");
+            goToTheEndOfTheTextAreaContent();
+        }
+        
     }
 
     @FXML
