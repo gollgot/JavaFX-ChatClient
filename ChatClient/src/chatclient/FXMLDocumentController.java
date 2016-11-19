@@ -5,7 +5,9 @@
  */
 package chatclient;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
@@ -87,6 +89,7 @@ public class FXMLDocumentController implements Initializable {
             out.flush();
             taContent.setText(taContent.getText()+getTimeFormated()+"Vous êtes connecté au serveur\n");
             goToTheEndOfTheTextAreaContent();
+            readMessage();
         } catch (IOException ex) {
             // The connection is not etablish
             taContent.setText(taContent.getText()+getTimeFormated()+"Connexion au serveur impossible ...\n");
@@ -124,14 +127,20 @@ public class FXMLDocumentController implements Initializable {
     
     // get the time when you call the method
     private String getTimeFormated(){
+        String time = "";
         int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int minutes = Calendar.getInstance().get(Calendar.MINUTE);
         int seconds = Calendar.getInstance().get(Calendar.SECOND);
-        
-        String time = hours+":"+minutes+":"+seconds+" ";
+        if(seconds < 10){
+            time = hours+":"+minutes+":0"+seconds+" ";
+        }else{
+            time = hours+":"+minutes+":"+seconds+" ";
+        }
+
         return time;
     }
     
+    // send /quit to the server and close all socket, return to the initial state
     private void disconnect(){
         PrintWriter out = null;
         try {
@@ -144,6 +153,7 @@ public class FXMLDocumentController implements Initializable {
             // Put all buttons etc.. on the init state
             socket.close();
             taContent.setText("");
+            taConnectedUsers.setText("");
             btnDisconnection.setVisible(false);
             btnConnection.setVisible(true);
             tfUsername.setDisable(false);
@@ -156,6 +166,44 @@ public class FXMLDocumentController implements Initializable {
         } finally {
             out.close();
         }
+    }
+    
+    private void readMessage(){
+        Thread readMessageThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BufferedReader in = null;
+                String receivedMessage;
+                while(!socket.isClosed()){
+                    try {
+                        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        receivedMessage = in.readLine();
+                        if(receivedMessage.contains("[OnlineUsers];")){
+                            String[] onlineUsers = receivedMessage.split(";");
+                            String toDisplay = "";
+                            for (int i = 1; i < onlineUsers.length; i++) {
+                                toDisplay += onlineUsers[i]+"\n";
+                            }
+                            taConnectedUsers.setText("");
+                            taConnectedUsers.setText(toDisplay);
+                        }
+                    } catch (IOException ex) {
+                        try {
+                            // When the user Disconnected, the socket is closed but
+                            // the execution is blocked in "receivedMessage = in.readLine();" line
+                            // so, we close the socket properly
+                            System.out.println("ERROR in method (Thread) : readMessage ex = "+ex.getMessage().toString());
+                            socket.close();
+                        } catch (IOException ex1) {
+                            System.out.println("ERROR in method (Thread) : readMessage ex1 = "+ex.getMessage().toString());
+                        }
+                    }
+                }
+            }
+        });
+        
+        readMessageThread.start();
+        
     }
     
 }
