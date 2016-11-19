@@ -94,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void btnDisconnexionAction(ActionEvent event) {
-      
+        disconnect();
     }
 
     @FXML
@@ -104,13 +104,43 @@ public class FXMLDocumentController implements Initializable {
             // Send a message to the server
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             String messageToSend = tfMessage.getText();
-            out.println(messageToSend);
-            out.flush();
+            if(messageToSend.equals("/quit")){
+                disconnect();
+            }else{
+                System.out.println(messageToSend);
+                out.println(messageToSend);
+                out.flush();
+            }
             
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error on 'btnSendAction' method. EX: "+ex.getMessage().toString());
         }
         
+    }
+    
+    private void disconnect(){
+        PrintWriter out = null;
+        try {
+            // Send message /quit to the server (like that he knows we quit and he
+            // can close properly all socket
+            out = new PrintWriter(socket.getOutputStream());
+            String messageToSend = "/quit";
+            out.println(messageToSend);
+            out.flush();
+            // Put all buttons etc.. on the init state
+            socket.close();
+            btnDisconnection.setVisible(false);
+            btnConnection.setVisible(true);
+            tfUsername.setDisable(false);
+            tfServerIp.setDisable(false);
+            btnSend.setDisable(true);
+            tfMessage.setText("");
+            tfMessage.setDisable(true);       
+        } catch (IOException ex) {
+            System.out.println("Error on 'disconnect' method. EX: "+ex.getMessage().toString());
+        } finally {
+            out.close();
+        }
     }
     
 }
