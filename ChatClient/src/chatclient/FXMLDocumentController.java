@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -84,9 +85,11 @@ public class FXMLDocumentController implements Initializable {
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             out.println(username);
             out.flush();
+            taContent.setText(taContent.getText()+getTimeFormated()+"Vous êtes connecté au serveur\n");
+            goToTheEndOfTheTextAreaContent();
         } catch (IOException ex) {
             // The connection is not etablish
-            taContent.setText(taContent.getText()+"Connexion au serveur impossible ...\n");
+            taContent.setText(taContent.getText()+getTimeFormated()+"Connexion au serveur impossible ...\n");
             goToTheEndOfTheTextAreaContent();
         }
         
@@ -107,15 +110,26 @@ public class FXMLDocumentController implements Initializable {
             if(messageToSend.equals("/quit")){
                 disconnect();
             }else{
-                System.out.println(messageToSend);
                 out.println(messageToSend);
                 out.flush();
+                taContent.setText(taContent.getText()+getTimeFormated()+"Vous : "+messageToSend+"\n");
+                goToTheEndOfTheTextAreaContent();
             }
             
         } catch (IOException ex) {
             System.out.println("Error on 'btnSendAction' method. EX: "+ex.getMessage().toString());
         }
         
+    }
+    
+    // get the time when you call the method
+    private String getTimeFormated(){
+        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int minutes = Calendar.getInstance().get(Calendar.MINUTE);
+        int seconds = Calendar.getInstance().get(Calendar.SECOND);
+        
+        String time = hours+":"+minutes+":"+seconds+" ";
+        return time;
     }
     
     private void disconnect(){
@@ -129,6 +143,7 @@ public class FXMLDocumentController implements Initializable {
             out.flush();
             // Put all buttons etc.. on the init state
             socket.close();
+            taContent.setText("");
             btnDisconnection.setVisible(false);
             btnConnection.setVisible(true);
             tfUsername.setDisable(false);
