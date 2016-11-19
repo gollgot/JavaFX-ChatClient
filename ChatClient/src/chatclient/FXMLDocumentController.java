@@ -186,6 +186,10 @@ public class FXMLDocumentController implements Initializable {
                             }
                             taConnectedUsers.setText("");
                             taConnectedUsers.setText(toDisplay);
+                        }else if(receivedMessage.contains("[ServerDisconnected]")){
+                            disconnect();
+                            taContent.setText(taContent.getText()+getTimeFormated()+"Serveur déconnecté...\n");
+                            goToTheEndOfTheTextAreaContent();
                         }
                     } catch (IOException ex) {
                         try {
