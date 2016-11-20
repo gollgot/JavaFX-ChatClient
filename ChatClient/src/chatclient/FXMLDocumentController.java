@@ -92,7 +92,7 @@ public class FXMLDocumentController implements Initializable {
             readMessage();
         } catch (IOException ex) {
             // The connection is not etablish
-            taContent.setText(taContent.getText()+getTimeFormated()+"Connexion au serveur impossible ...\n");
+            taContent.setText(taContent.getText()+getTimeFormated()+"Connexion au serveur impossible ... Vérfiez l'ip du serveur ou réessayez plus tard.\n");
             goToTheEndOfTheTextAreaContent();
         }
         
@@ -119,8 +119,24 @@ public class FXMLDocumentController implements Initializable {
                 goToTheEndOfTheTextAreaContent();
             }
             
+            tfMessage.setText("");
+            
         } catch (IOException ex) {
             System.out.println("Error on 'btnSendAction' method. EX: "+ex.getMessage().toString());
+            // If the server is closed, but not with a good way ...
+            // We display a error message and disconnect the user.
+            taContent.setText(taContent.getText()+getTimeFormated()+"Impossible d'envoyer votre message, le serveur ne répond plus. Veuillez essayer de vous reconnecter.\n");
+            goToTheEndOfTheTextAreaContent();
+            // Put all buttons etc.. on the init state
+            //socket.close();
+            taConnectedUsers.setText("");
+            btnDisconnection.setVisible(false);
+            btnConnection.setVisible(true);
+            tfUsername.setDisable(false);
+            tfServerIp.setDisable(false);
+            btnSend.setDisable(true);
+            tfMessage.setText("");
+            tfMessage.setDisable(true);
         }
         
     }
@@ -189,6 +205,9 @@ public class FXMLDocumentController implements Initializable {
                         }else if(receivedMessage.contains("[ServerDisconnected]")){
                             disconnect();
                             taContent.setText(taContent.getText()+getTimeFormated()+"Serveur déconnecté...\n");
+                            goToTheEndOfTheTextAreaContent();
+                        }else{
+                            taContent.setText(taContent.getText()+receivedMessage+"\n");
                             goToTheEndOfTheTextAreaContent();
                         }
                     } catch (IOException ex) {
