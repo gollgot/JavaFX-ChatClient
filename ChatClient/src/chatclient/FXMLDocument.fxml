@@ -12,7 +12,7 @@
 <AnchorPane id="AnchorPane" prefHeight="530.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatclient.FXMLDocumentController">
     <children>
       <TextArea fx:id="taContent" editable="false" layoutX="26.0" layoutY="31.0" prefHeight="420.0" prefWidth="480.0" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-      <TextField fx:id="tfMessage" layoutX="20.0" layoutY="461.0" prefHeight="37.0" prefWidth="480.0" promptText="Votre message" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" />
+      <TextField fx:id="tfMessage" layoutX="20.0" layoutY="461.0" onKeyPressed="#tfMessageKeyPressed" prefHeight="37.0" prefWidth="480.0" promptText="Votre message" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0" />
       <TextField fx:id="tfUsername" layoutX="517.0" layoutY="20.0" prefHeight="31.0" prefWidth="140.0" promptText="Pseudo" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="20.0" />
       <TextField fx:id="tfServerIp" layoutX="690.0" layoutY="20.0" prefHeight="31.0" prefWidth="140.0" promptText="IP du serveur" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
       <Button fx:id="btnDisconnection" layoutX="520.0" layoutY="64.0" mnemonicParsing="false" onAction="#btnDisconnexionAction" prefHeight="37.0" prefWidth="300.0" text="Déconnexion" />

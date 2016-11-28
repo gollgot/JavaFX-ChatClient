@@ -23,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 /**
@@ -102,10 +104,9 @@ public class FXMLDocumentController implements Initializable {
     private void btnDisconnexionAction(ActionEvent event) {
         disconnect();
     }
-
-    @FXML
-    private void btnSendAction(ActionEvent event) {
-  
+    
+    private void sendMessage(){
+    
         try {
             // Send a message to the server
             PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -138,7 +139,25 @@ public class FXMLDocumentController implements Initializable {
             tfMessage.setText("");
             tfMessage.setDisable(true);
         }
+       
+    }
         
+
+    @FXML
+    private void btnSendAction(ActionEvent event) {
+        if(!tfMessage.getText().isEmpty()){
+            sendMessage();   
+            tfMessage.requestFocus();
+        }
+    }
+    
+    @FXML
+    private void tfMessageKeyPressed(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER){
+            if(!tfMessage.getText().isEmpty()){
+                sendMessage();
+            }
+        }
     }
     
     // get the time when you call the method
@@ -228,5 +247,6 @@ public class FXMLDocumentController implements Initializable {
         readMessageThread.start();
         
     }
+
     
 }
