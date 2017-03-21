@@ -209,7 +209,7 @@ public class FXMLDocumentController implements Initializable {
             public void run() {
                 BufferedReader in = null;
                 String receivedMessage;
-                while(!socket.isClosed()){
+                while(!socket.isClosed() && socket.isConnected()){
                     try {
                         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         receivedMessage = in.readLine();
@@ -221,6 +221,7 @@ public class FXMLDocumentController implements Initializable {
                             }
                             taConnectedUsers.setText("");
                             taConnectedUsers.setText(toDisplay);
+                            System.out.println("DEBUG : "+toDisplay);
                         }else if(receivedMessage.contains("[ServerDisconnected]")){
                             disconnect();
                             taContent.setText(taContent.getText()+getTimeFormated()+"Serveur déconnecté...\n");
